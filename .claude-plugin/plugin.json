@@ -12,6 +12,19 @@
       "title": "tmux: Enter saves without scrolling",
       "description": "Inside tmux, bind Enter (in the running server, not your config) to send Shift+Enter while a comment is armed, so saving it doesn't scroll to the end. Skipped if Enter is already bound or extended-keys is off.",
       "default": true
+    },
+    "editorLauncher": {
+      "type": "string",
+      "title": "Editor: how to open it",
+      "description": "How /quick-reply-edit opens your editor. auto uses tmux if you're in it, else kitty if it's listening for remote control, else the command below.",
+      "options": ["auto", "kitty", "tmux", "command"],
+      "default": "auto"
+    },
+    "editorCommand": {
+      "type": "string",
+      "title": "Editor: command",
+      "description": "For the command launcher: the editor's command line, with {file} for the buffer's path. It must wait until the editor quits, e.g. nvim-qt --nofork {file}.",
+      "default": ""
     }
   }
 }
