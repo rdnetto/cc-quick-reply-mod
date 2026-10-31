@@ -57,6 +57,14 @@ export function composeReply(comments: readonly Comment[]): string {
     .join('\n\n')
 }
 
+/** What a composer submit sends: the box as is, else the comments first. */
+export function sendText(box: string, list: readonly Comment[]): string {
+  const reply = composeReply(list)
+  // A hand-edited comment still holds a quote; prepending would send it twice.
+  if (box.startsWith(reply) || box.split('\n').some(line => line.startsWith('>'))) return box
+
+  return box === '' ? reply : `${reply}\n\n${box}`
+}
 
 /**
  * A block's id: a hash of its text. The engine may draw a reply again under

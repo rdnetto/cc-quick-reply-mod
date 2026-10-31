@@ -2,7 +2,7 @@ import { atom, read, update } from 'claude-code'
 import type { EngineInterface, On, PluginOptions } from 'claude-code'
 
 import type { Armed, Comment } from '../types'
-import { blockId, composeReply, splitBlocks } from './blocks'
+import { blockId, composeReply, sendText, splitBlocks } from './blocks'
 import { quoteDecorations } from './quote'
 import { isQuoteTrigger, resetLastQuoted, withQuote } from './quote-trigger'
 import { ARMED_OPTION, ENTER_BINDING, tmuxPlan } from './tmux'
@@ -241,11 +241,7 @@ export function registerInlineComments(on: On, options: PluginOptions) {
       if (list.length === 0) return next(e)
       await update($, comments, () => ({}))
       // The box usually holds them already (showPending); else they go first.
-      const reply = composeReply(list)
-      const own = e.text.trim()
-      const text = own.startsWith(reply) ? own : own === '' ? reply : `${reply}\n\n${own}`
-
-      return next({ ...e, text })
+      return next({ ...e, text: sendText(e.text.trim(), list) })
     }
 
     await saveArmed($, armed, quotes.get(armed.id), e.text.trim())
