@@ -57,11 +57,14 @@ export function composeReply(comments: readonly Comment[]): string {
     .join('\n\n')
 }
 
+/** Whether any line of the box starts a quote, as a hand-edited comment still does. */
+export const hasQuoteLine = (box: string) => box.split('\n').some(line => line.startsWith('>'))
+
 /** What a composer submit sends: the box as is, else the comments first. */
 export function sendText(box: string, list: readonly Comment[]): string {
   const reply = composeReply(list)
   // A hand-edited comment still holds a quote; prepending would send it twice.
-  if (box.startsWith(reply) || box.split('\n').some(line => line.startsWith('>'))) return box
+  if (box.startsWith(reply) || hasQuoteLine(box)) return box
 
   return box === '' ? reply : `${reply}\n\n${box}`
 }

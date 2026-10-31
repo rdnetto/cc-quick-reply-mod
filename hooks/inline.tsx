@@ -86,7 +86,7 @@ const firstLine = (text: string, max = 50) => {
 
 // Puts the pending comments in the prompt box, ready to send with Enter, and
 // below them the text set aside when the block was armed (or the caret's line).
-async function showPending($: EngineInterface) {
+export async function showPending($: EngineInterface) {
   const text = pendingText(Object.values(await read($, comments))) + (await read($, held))
   await update($, held, () => '')
   await $.prompt.fill({ text, decorations: quoteDecorations(text) })

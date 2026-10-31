@@ -75,6 +75,35 @@ plugin.
 `>` on a non-empty line, with nothing selected, or a second time with the same
 selection inserts a plain `>`.
 
+## Edit in your editor
+
+`/quick-reply-edit` opens the last reply and your prompt in your editor. Bind
+it in `~/.claude/keybindings.json`:
+
+```json
+{ "context": "Chat", "bindings": { "ctrl+x ctrl+e": "command:quick-reply-edit" } }
+```
+
+In the buffer:
+
+- Every line you add under a block of the reply is a comment on that block,
+  with one leading `>` stripped. Comments already pending show up the same way.
+  A reworded line counts as an added line; deleted reply text is ignored.
+- Everything below the `<!-- quick-reply: everything below this line is your prompt -->`
+  line is the prompt box's own text, sent as is.
+- Quit without saving (`:cq`) to cancel. If the buffer can't be applied (the
+  divider line is gone, say), nothing changes and a toast gives the file's path.
+- Comments or prompt text changed while the editor was open are merged. If both
+  sides changed the same one, you're asked which version to keep, or to reopen
+  the editor with `<<<<<<<` markers around the conflict.
+
+Settings (`/config`): **editorLauncher** is `auto` (tmux popup if you're in
+tmux, else a kitty overlay if kitty's remote control is on, else the command),
+`tmux`, `kitty` or `command`; **editorCommand** is the command for `command`,
+with `{file}` for the buffer's path. It must wait until the editor quits, e.g.
+`nvim-qt --nofork {file}`. Terminal editors run as `$VISUAL`, else `$EDITOR`,
+else `vi`. The tmux popup needs tmux 3.2 or newer.
+
 ## Install
 
 ```
